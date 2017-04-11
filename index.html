@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+    <title>Chatty</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font: 13px Helvetica, Arial;
+            background: orange;
+        }
+        form {
+            background: orange;
+            font-size: large;
+            padding: 3px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        form input {
+            border: 0;
+            padding: 10px;
+            width: 90%;
+            margin-right: .5%;
+        }
+        form button {
+            width: 9%;
+            background: #008000;
+            border: none;
+            padding: 10px;
+        }
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            font-size: large;
+        }
+        #messages li {
+            padding: 5px 10px;
+        }
+        #messages li:nth-child(odd) {
+            background: #eee;
+        }
+        li:nth-child(even){
+            background: white;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center; font-size: 50px">Chatty Messaging App</h1>
+<ul id="messages"></ul>
+<form action="">
+    <input id="m" autocomplete="off" /><button>Send</button>
+</form>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+    $(function () {
+        var name =prompt("Enter your name","Enter Name")+" : ";
+//        var COLORS = [                //to add colors to the name
+//            '#e21400', '#91580f', '#f8a700', '#f78b00',
+//            '#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+//            '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+//        ];
+        var socket = io();
+        $('form').submit(function(){
+            socket.emit('chat message', name + $('#m').val());
+            $('#m').val('');
+            return false;
+        });
+        socket.on('chat message', function(msg){
+            $('#messages').append($('<li>').text(msg));
+        });
+    });
+</script>
+</html>
